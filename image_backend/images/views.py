@@ -42,11 +42,6 @@ def edit(request, id, actions, changes):
         print(changes.split(','))
 
         image = Image.objects.filter(id=id)[0]
-
-        # def get_image_url(request, image):
-        #     host = request.get_host()
-        #     image_url = f'http://{host}{image.path.url}'
-        #     return image_url
         color(b=-40, image=image, request=request)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
