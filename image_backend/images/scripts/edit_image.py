@@ -53,6 +53,7 @@ def color(image, request, r=0, g=0, b=0):
             pixel[1] = adjust_pixel(pixel[1], g)
             pixel[2] = adjust_pixel(pixel[2], b)
     new_img = PIL.Image.fromarray(data)
+    new_img.show()
     save_image(new_img, image)
     print('image: ', image)
     print('r: ', r)

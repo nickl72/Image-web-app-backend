@@ -38,11 +38,24 @@ class GetImageById(generics.ListAPIView):
 def edit(request, id, actions, changes):
     if request.method == 'PUT' or request.method == 'POST':
 
-        print(actions.split(','))
-        print(changes.split(','))
-
+        actions = actions.split(',') 
+        changes = changes.split(',')
+        for i in range(0, len(actions)):
+            a = actions[i].lower()
+            c = int(changes[i])
+            if a == 'blur':
+                blur = c
+            elif a == 'brightness':
+                brightness = c
+            elif a == 'red':
+                red = c
+            elif a == 'green':
+                green = c
+            elif a == 'blue':
+                blue = c
+        
         image = Image.objects.filter(id=id)[0]
-        color(b=-40, image=image, request=request)
+        color(r=red, g=green, b=blue, image=image, request=request)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
         return HttpResponse(json.dumps(image_data))
