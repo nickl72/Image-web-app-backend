@@ -36,12 +36,11 @@ class GetImageById(generics.ListAPIView):
 
 @csrf_exempt 
 def edit(request, id, actions, changes):
-    if request.method == 'PUT' or request.method == 'POST':
+
         red = green = blue = blur = 0
         brightness = 1
         actions = actions.split(',') 
         changes = changes.split(',')
-        print(changes)
 
         # parses string params
         for i in range(0, len(actions)):
@@ -57,6 +56,8 @@ def edit(request, id, actions, changes):
             elif a == 'blue':
                 blue = int(changes[i])
 
+    # Runs edits to image
+    def run_edits():
         image = Image.objects.filter(id=id)[0]
         img = open_image(image)
 
@@ -70,12 +71,24 @@ def edit(request, id, actions, changes):
         if brightness != 1:
             img = edit_brightness(img = img, value = brightness)
             img.show()
-        
-        
+        return img
+
+    # PUT will overwrite existing file
+    if request.method == 'PUT':        
+        img = run_edits()
 
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
         return HttpResponse(json.dumps(image_data))
+    
+    # POST will create new image
+    elif request.method = 'POST':
+        img = run_edits()
+
+        image_path=get_image_url(request, image)
+        image_data = {'path':image_path, 'id':image.id}
+        return HttpResponse(json.dumps(image_data))
+
     else: 
         return HttpResponse('Error! Edits must be made as a PUT or POST request')
 
