@@ -2,6 +2,7 @@
 import PIL 
 from datetime import datetime
 from ..models import User, Image as Img
+from numpy import array
 
 
 image_path = 'image_db'
@@ -32,9 +33,30 @@ def brightness(image,value):
 def blur(image, value):
     image = open_image(image)
     return
-def color(image, request, r=0, g=0, b=0):
+
+def adjust_pixel(pixel, adjust):
+    if (pixel + adjust < 256) and (pixel + adjust > -1):
+        return pixel + adjust
+    elif pixel + adjust > 255:
+        return 255
+    else:
+        return 0
+    
+
+def color(image, request, r=0, g=-40, b=0):
     print(image.title)
     img = open_image(image)
+    img.show()
+    data = array(img)
+    print(data[0][0])
+    for row in data:
+        for pixel in row:
+            pixel[0] = adjust_pixel(pixel[0], r)
+            pixel[1] = adjust_pixel(pixel[1], g)
+            pixel[2] = adjust_pixel(pixel[2], b)
+    print(data[0][0])
+    new_img = PIL.Image.fromarray(data)
+    new_img.show()
     save_image(img, image)
     print('image: ', image)
     print('r: ', r)
