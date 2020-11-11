@@ -9,12 +9,20 @@ def open_image(image):
     return PIL.Image.open(f'{image_path}/{image.path}')
 
 # new_image is a PIL.Image, original_image is a imageField_object
-def save_image(new_image, original_image):
-    now = datetime.now().strftime('%Y%m%d%H%M%S')
-    location = f'{image_path}/{now}.jpg'
+def save_image(new_image, original_image, create_record = False):
+    if create_record:
+        filename = datetime.now().strftime('%Y%m%d%H%M%S')+'.jpeg'
+    else:
+        filename = f'{original_image.path}'
+
+    location = f'{image_path}/{filename}'
     new_image.save(location)
-    img = Img(title=original_image.title, path=location, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
-    img.save()
+
+    if create_record:
+        img = Img(title=original_image.title, path=location, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
+        img.save()
+
+    new_image.close()
     return
 
 # image is a django database imageField object
