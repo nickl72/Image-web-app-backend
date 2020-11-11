@@ -9,6 +9,7 @@ from .serializers import ImageSerializer, UserSerializer, UserImagesSerializer
 from rest_framework import generics
 import json
 from .scripts.parse_data import get_image_url
+from .scripts.edit_image import *
 
 class ImageListCreate(generics.ListCreateAPIView):
     queryset = Image.objects.all()
@@ -46,7 +47,7 @@ def edit(request, id, actions, changes):
         #     host = request.get_host()
         #     image_url = f'http://{host}{image.path.url}'
         #     return image_url
-
+        color(b=4, image=image)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
         return HttpResponse(json.dumps(image_data))
