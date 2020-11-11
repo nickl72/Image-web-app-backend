@@ -1,5 +1,6 @@
 # This file will process all requests to edit images
 import PIL 
+from PIL import ImageEnhance
 from datetime import datetime
 from ..models import User, Image as Img
 from numpy import array
@@ -27,11 +28,13 @@ def save_image(new_image, original_image, create_record = False):
     return
 
 # image is a django database imageField object
-def brightness(image,value):
-    image = open_image(image)
-    return
-def blur(image, value):
-    image = open_image(image)
+def edit_brightness(img, value):
+    new_img = ImageEnhance.Brightness(img)
+    new_img.enhance(value).show()
+    return new_image
+
+def edit_blur(img, value):
+    img = open_image(image)
     return
 
 def adjust_pixel(pixel, adjust):
@@ -43,9 +46,7 @@ def adjust_pixel(pixel, adjust):
         return 0
     
 
-def color(image, request, r=0, g=0, b=0):
-    print(image.title)
-    img = open_image(image)
+def color(img, r=0, g=0, b=0):
     data = array(img)
     for row in data:
         for pixel in row:
@@ -53,10 +54,6 @@ def color(image, request, r=0, g=0, b=0):
             pixel[1] = adjust_pixel(pixel[1], g)
             pixel[2] = adjust_pixel(pixel[2], b)
     new_img = PIL.Image.fromarray(data)
-    new_img.show()
-    save_image(new_img, image)
-    print('image: ', image)
-    print('r: ', r)
-    print('g: ', g)
-    print('b: ', b)
+    return new_img
+    # save_image(new_img, image)
 
