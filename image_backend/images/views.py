@@ -17,6 +17,7 @@ from .scripts.edit_image import *
 class ImageListCreate(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 # class ImageListCreate(generics.ListCreateAPIView):
 #     queryset = Image.objects.filter
@@ -24,7 +25,7 @@ class ImageListCreate(generics.ListCreateAPIView):
 class UserListCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get_permissions(self):
         if self.request.method == 'POST':
             self.permission_classes = [permissions.AllowAny]
