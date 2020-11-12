@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -37,13 +37,13 @@ class GetImageById(generics.ListAPIView):
 @csrf_exempt 
 def edit(request, id, actions, changes):
 
-        red = green = blue = blur = 0
-        brightness = 1
-        actions = actions.split(',') 
-        changes = changes.split(',')
+    red = green = blue = blur = 0
+    brightness = 1
+    actions = actions.split(',') 
+    changes = changes.split(',')
 
-        # parses string params
-        for i in range(0, len(actions)):
+    # parses string params
+    for i in range(0, len(actions)):
             a = actions[i].lower()
             if a == 'blur':
                 blur = int(changes[i])
@@ -82,7 +82,7 @@ def edit(request, id, actions, changes):
         return HttpResponse(json.dumps(image_data))
     
     # POST will create new image
-    elif request.method = 'POST':
+    elif request.method == 'POST':
         img = run_edits()
 
         image_path=get_image_url(request, image)
@@ -92,4 +92,9 @@ def edit(request, id, actions, changes):
     else: 
         return HttpResponse('Error! Edits must be made as a PUT or POST request')
 
-        
+
+def send_file(request,id):
+    image = Image.objects.filter(id=id)[0]
+    print(f'image_db/{image.path}')
+    img = open(f'image_db/{image.path}', 'rb')
+    return FileResponse(img, as_attachment=True,filename='new_image.jpeg')
