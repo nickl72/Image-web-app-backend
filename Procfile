@@ -1,1 +1,1 @@
-web: gunicorn <nameOfProject>.wsgi --log-file -
+web: gunicorn flow-images.wsgi --log-file -
