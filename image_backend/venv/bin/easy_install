@@ -1,4 +1,4 @@
-#!/Users/nl78604/wolves/projects/image-web-app/image_backend/venv/bin/python3.7
+#!/Users/nl78604/wolves/projects/images-project/image-web-app-backend/image_backend/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

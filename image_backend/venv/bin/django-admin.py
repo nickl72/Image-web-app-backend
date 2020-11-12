@@ -1,4 +1,4 @@
-#!/Users/nl78604/wolves/projects/image-web-app/image_backend/venv/bin/python3.7
+#!/Users/nl78604/wolves/projects/images-project/image-web-app-backend/image_backend/venv/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
