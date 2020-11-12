@@ -1,16 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 # Need to add pass field
-class User(models.Model):
-    def __str__(self):
-        return self.username
 
-    name = models.CharField(max_length=200)
-    username = models.CharField(max_length=200)
-    email = models.EmailField()
-    following = models.ManyToManyField("self", symmetrical = False)
+# class User(models.Model):
+#     def __str__(self):
+#         return self.username
+
+#     name = models.CharField(max_length=200)
+#     username = models.CharField(max_length=200)
+#     email = models.EmailField()
+#     following = models.ManyToManyField("self", symmetrical = False)
+#     password = models.CharField(max_length=200)
 
 
 class Image(models.Model):

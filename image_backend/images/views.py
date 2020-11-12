@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+
 
 
 # Create your views here.
-from .models import Image, User
+from .models import Image # User
 from .serializers import ImageSerializer, UserSerializer, UserImagesSerializer
-from rest_framework import generics
+from rest_framework import generics, permissions
 import json
 from .scripts.parse_data import get_image_url
 from .scripts.edit_image import * 
+
 
 class ImageListCreate(generics.ListCreateAPIView):
     queryset = Image.objects.all()
@@ -21,6 +24,11 @@ class ImageListCreate(generics.ListCreateAPIView):
 class UserListCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = [permissions.AllowAny]
+        return super(UserListCreate, self).get_permissions()
 
 class UserImagesCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
