@@ -1,1 +1,1 @@
-web: gunicorn flow-images.wsgi --log-file -
+web: gunicorn image_backend.wsgi --log-file -
