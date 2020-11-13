@@ -1,1 +1,1 @@
-web: gunicorn image_backend.py --log-file -
+web: gunicorn image_backend.wsgi --log-file -
