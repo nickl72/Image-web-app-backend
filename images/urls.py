@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/download/<int:id>/', views.send_file),
     path('api/ascii/<int:id>/', views.send_ascii),
     path('api/ascii/<int:id>/<str:html>/', views.send_ascii ),
+    path('api/crop/<int:id>/<int:left>/<int:top>/<int:right>/<int:bottom>/', views.crop ),
 ]

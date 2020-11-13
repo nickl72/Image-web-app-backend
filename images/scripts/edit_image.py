@@ -16,12 +16,13 @@ def save_image(new_image, original_image, create_record = False):
         filename = datetime.now().strftime('%Y%m%d%H%M%S')+'.jpeg'
     else:
         filename = f'{original_image.path}'
-
+    
     location = f'{image_path}/{filename}'
     new_image.save(location)
+    path = f'{filename}'
 
     if create_record:
-        img = Img(title=original_image.title, path=location, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
+        img = Img(title=original_image.title, path=path, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
         img.save()
 
     new_image.close()
@@ -95,3 +96,7 @@ def asciiConvert(image, html):
         new_file.write('</p></body></html>')
 
     return new_file
+
+def crop_image(img, box):
+    new_img = img.crop(box)
+    return new_img

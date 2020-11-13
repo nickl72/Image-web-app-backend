@@ -120,3 +120,14 @@ def send_ascii(request, id, html = False):
     else:
         new_file = open(f'image_db/ascii.txt', 'rb')
     return FileResponse(new_file, as_attachment=True, filename='ascii.txt')
+
+
+def crop(request, id, left, top, right, bottom):
+    box = (left,top,right, bottom)
+    image = Image.objects.filter(id=id)[0]
+    img = open_image(image)
+    new_img = crop_image(img, box)
+    save_image(new_img, image)
+    image_path=get_image_url(request, image)
+    image_data = {'path':image_path, 'id':image.id}
+    return HttpResponse(json.dumps(image_data))
