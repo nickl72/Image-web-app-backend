@@ -72,8 +72,7 @@ def edit(request, id, actions, changes):
                 blue = int(changes[i])
 
     # Runs edits to image
-    def run_edits():
-        image = Image.objects.filter(id=id)[0]
+    def run_edits(image):
         img = open_image(image)
 
         # sends img to get editors
@@ -85,10 +84,10 @@ def edit(request, id, actions, changes):
             img = edit_brightness(img = img, value = brightness)
         return img
 
+    image = Image.objects.filter(id=id)[0]
     # PUT will overwrite existing file
     if request.method == 'PUT':        
-        new_img = run_edits()
-
+        new_img = run_edits(image)
         image = save_image(new_img, image, create_record=False)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
@@ -96,8 +95,8 @@ def edit(request, id, actions, changes):
     
     # POST will create new image
     elif request.method == 'POST':
-        new_img = run_edits()
-
+        new_img = run_edits(image)
+    
         image = save_image(new_img, image, create_record=True)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
