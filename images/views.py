@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 from .models import Image # User
-from .serializers import ImageSerializer, UserSerializer, UserImagesSerializer
+from .serializers import ImageSerializer, UserSerializer, UserImagesSerializer, SingleUserSerializer
 from rest_framework import generics, permissions
 import json
 from .scripts.parse_data import get_image_url
@@ -30,6 +30,13 @@ class UserListCreate(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             self.permission_classes = [permissions.AllowAny]
         return super(UserListCreate, self).get_permissions()
+
+class SingleUser(generics.ListAPIView):
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return User.objects.filter(username=username)
+    serializer_class = SingleUserSerializer
+
 
 class UserImagesCreate(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -139,6 +146,7 @@ def overlay(request, id_1, id_2, left, top):
     img_2 = open_image(image_2)
     dest = (left,top)
     new_img = overlay_images(img_1,img_2, dest)
+    new_img.show()
 
     image = save_image(new_img, image, create_record=False)
     image_path=get_image_url(request, image)

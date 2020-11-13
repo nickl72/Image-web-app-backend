@@ -26,6 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class SingleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
 class UserImagesSerializer(serializers.ModelSerializer):
     created_images = ImageSerializer(many=True, read_only=True)
 
