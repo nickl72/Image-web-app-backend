@@ -24,9 +24,10 @@ def save_image(new_image, original_image, create_record = False):
     if create_record:
         img = Img(title=original_image.title, path=path, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
         img.save()
-
+    else:
+        img = original_image
     new_image.close()
-    return
+    return img
 
 # image is a django database imageField object
 def edit_brightness(img, value):
@@ -99,4 +100,8 @@ def asciiConvert(image, html):
 
 def crop_image(img, box):
     new_img = img.crop(box)
+    return new_img
+
+def overlay_images(img_1, img_2, dest):
+    new_img = img_1.alpha_composite(img_2, dest)
     return new_img

@@ -50,7 +50,6 @@ def edit(request, id, actions, changes):
     brightness = 1
     actions = actions.split(',') 
     changes = changes.split(',')
-    print('editing')
     # parses string params
     for i in range(0, len(actions)):
             a = actions[i].lower()
@@ -73,27 +72,26 @@ def edit(request, id, actions, changes):
         # sends img to get editors
         if red != 0 or green != 0 or blue != 0:
             img = color(r = red, g = green, b = blue, img = img)
-            img.show()
         if blur != 0:
             img = edit_blur(img = img, value = blur)
-            img.show()
         if brightness != 1:
             img = edit_brightness(img = img, value = brightness)
-            img.show()
         return img
 
     # PUT will overwrite existing file
     if request.method == 'PUT':        
-        img = run_edits()
+        new_img = run_edits()
 
+        image = save_image(new_img, image, create_record=False)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
         return HttpResponse(json.dumps(image_data))
     
     # POST will create new image
     elif request.method == 'POST':
-        img = run_edits()
+        new_img = run_edits()
 
+        image = save_image(new_img, image, create_record=True)
         image_path=get_image_url(request, image)
         image_data = {'path':image_path, 'id':image.id}
         return HttpResponse(json.dumps(image_data))
@@ -127,7 +125,23 @@ def crop(request, id, left, top, right, bottom):
     image = Image.objects.filter(id=id)[0]
     img = open_image(image)
     new_img = crop_image(img, box)
-    save_image(new_img, image)
+
+    image = save_image(new_img, image, create_record=False)
     image_path=get_image_url(request, image)
     image_data = {'path':image_path, 'id':image.id}
     return HttpResponse(json.dumps(image_data))
+
+
+def overlay(request, id_1, id_2, left, top):
+    image_1 = Image.objects.filter(id=id_1)[0]
+    image_2 = Image.objects.filter(id=id_2)[0]
+    img_1 = open_image(image_1)
+    img_2 = open_image(image_2)
+    dest = (left,top)
+    new_img = overlay_images(img_1,img_2, dest)
+
+    image = save_image(new_img, image, create_record=False)
+    image_path=get_image_url(request, image)
+    image_data = {'path':image_path, 'id':image.id}
+    return HttpResponse(json.dumps(image_data))
+

@@ -18,4 +18,5 @@ urlpatterns = [
     path('api/ascii/<int:id>/', views.send_ascii),
     path('api/ascii/<int:id>/<str:html>/', views.send_ascii ),
     path('api/crop/<int:id>/<int:left>/<int:top>/<int:right>/<int:bottom>/', views.crop ),
+    path('api/overlay/<int:id_1>/<int:id_2>/<int:left>/<int:top>/', views.overlay ),
 ]
