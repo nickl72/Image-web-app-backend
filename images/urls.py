@@ -15,4 +15,6 @@ urlpatterns = [
     path('api/userimages/', views.UserImagesCreate.as_view() ),
     path('api/edit/image/<int:id>/<str:actions>/<str:changes>/', views.edit),
     path('api/download/<int:id>/', views.send_file),
+    path('api/ascii/<int:id>/', views.send_ascii),
+    path('api/ascii/<int:id>/<str:html>/', views.send_ascii ),
 ]

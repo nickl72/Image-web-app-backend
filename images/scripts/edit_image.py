@@ -3,8 +3,8 @@ import PIL
 from PIL import ImageEnhance, ImageFilter
 from datetime import datetime
 from ..models import User, Image as Img
-from numpy import array
-
+from numpy import array, asarray
+from .ascii_map import ascii_arr
 
 image_path = 'image_db'
 def open_image(image):
@@ -57,3 +57,41 @@ def color(img, r=0, g=0, b=0):
     return new_img
     # save_image(new_img, image)
 
+def asciiConvert(image, html):
+    contrast = 1
+    if html:
+        new_file = open(f'image_db/ascii.html', 'w')
+    else:
+        new_file = open(f'image_db/ascii.txt', 'w')
+
+    img = open_image(image).convert('L')
+
+    if img.size[0] > img.size[1]:
+        scale = img.size[0]/300
+    else: 
+        scale = img.size[1]/300
+    
+    width = int(img.size[0]/scale) 
+    height = int(img.size[1]/scale)
+    data = asarray(img.resize((width,height))).copy() # scales image
+    
+    # Outputs html templating if called out
+    if html:
+        new_file.write('''
+            <style> p {font-size: 8px; font-family: monospace; zoom:25%;}</style>
+            <p>
+        ''')
+
+    # prints appropriate ascii char for each pixel
+    for band in data:
+        for pix in band:
+            new_file.write(ascii_arr[int(pix/8/contrast)*2*contrast])#
+        if html:
+            new_file.write('</br>')
+        else: 
+            new_file.write('\n')
+    
+    if html:
+        new_file.write('</p></body></html>')
+
+    return new_file

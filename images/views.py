@@ -107,3 +107,16 @@ def send_file(request,id):
     print(f'image_db/{image.path}')
     img = open(f'image_db/{image.path}', 'rb')
     return FileResponse(img, as_attachment=True,filename='new_image.jpeg')
+
+def send_ascii(request, id, html = False):
+    if html == 'True':
+        html = True
+    else:
+        html = False
+    image = Image.objects.filter(id=id)[0]
+    asciiConvert(image, html)
+    if html:
+        new_file = open(f'image_db/ascii.html', 'rb')
+    else:
+        new_file = open(f'image_db/ascii.txt', 'rb')
+    return FileResponse(new_file, as_attachment=True, filename='ascii.txt')
