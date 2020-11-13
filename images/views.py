@@ -17,7 +17,7 @@ from .scripts.edit_image import *
 class ImageListCreate(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
 # class ImageListCreate(generics.ListCreateAPIView):
 #     queryset = Image.objects.filter
@@ -50,7 +50,7 @@ def edit(request, id, actions, changes):
     brightness = 1
     actions = actions.split(',') 
     changes = changes.split(',')
-
+    print('editing')
     # parses string params
     for i in range(0, len(actions)):
             a = actions[i].lower()
