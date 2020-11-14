@@ -12,10 +12,21 @@ from rest_framework import generics, permissions
 import json
 from .scripts.parse_data import get_image_url
 from .scripts.edit_image import * 
+import random
 
 
 class ImageListCreate(generics.ListCreateAPIView):
-    queryset = Image.objects.all()
+    def get_queryset(self):
+        try:
+            limit = self.kwargs['limit']
+        except:
+            limit = False
+        if limit:
+            return Image.objects.all().order_by('?')[:self.kwargs['limit']]
+        elif self.kwargs['user']:
+            return Image.objects.filter(creator=self.kwargs['user'])
+        else: 
+            return Image.objects.all()
     serializer_class = ImageSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -38,14 +49,9 @@ class SingleUser(generics.ListAPIView):
     serializer_class = SingleUserSerializer
 
 
-class UserImagesCreate(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    # queryset = User.objects.filter(name__contains = 'nick') # filters results LIKE value
-    # queryset = User.objects.all()[:2] # Limits number of results
-    serializer_class = UserImagesSerializer
-
 class GetImageById(generics.ListAPIView):
     def get_queryset(self):
+        print(self.kwargs)
         id = self.kwargs['id']
         return Image.objects.filter(id = id)
     serializer_class = ImageSerializer
