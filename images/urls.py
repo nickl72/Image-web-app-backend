@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/images/random/<int:limit>/', views.ImageListCreate.as_view() ),
     path('api/images/<int:id>/', views.GetImageById.as_view() ), 
+    path('api/images/size/<int:id>/', views.image_size ),
     path('api/images/', views.ImageListCreate.as_view() ),
     path('api/users/', views.UserListCreate.as_view() ),
     path('api/users/<str:username>/', views.SingleUser.as_view() ),

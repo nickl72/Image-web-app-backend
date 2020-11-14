@@ -12,7 +12,6 @@ from rest_framework import generics, permissions
 import json
 from .scripts.parse_data import get_image_url
 from .scripts.edit_image import * 
-import random
 
 
 class ImageListCreate(generics.ListCreateAPIView):
@@ -51,7 +50,6 @@ class SingleUser(generics.ListAPIView):
 
 class GetImageById(generics.ListAPIView):
     def get_queryset(self):
-        print(self.kwargs)
         id = self.kwargs['id']
         return Image.objects.filter(id = id)
     serializer_class = ImageSerializer
@@ -114,7 +112,6 @@ def edit(request, id, actions, changes):
 
 def send_file(request,id):
     image = Image.objects.filter(id=id)[0]
-    print(f'image_db/{image.path}')
     img = open(f'image_db/{image.path}', 'rb')
     return FileResponse(img, as_attachment=True,filename='new_image.jpeg')
 
@@ -158,3 +155,10 @@ def overlay(request, id_1, id_2, left, top):
     image_data = {'path':image_path, 'id':image.id}
     return HttpResponse(json.dumps(image_data))
 
+def image_size(request, id):
+    image = Image.objects.filter(id=id)[0]
+    img = open_image(image)
+    width, height = img.size
+    size = {'width': width, 'height': height}
+    img.close()
+    return HttpResponse(json.dumps(size))
