@@ -53,7 +53,7 @@ def adjust_pixel(pixel, adjust):
     
 
 def color(img, r=0, g=0, b=0):
-    scale_ratio = 1000000 / (img.size[0] * img.size[1])
+    scale_ratio = (1000000 / (img.size[0] * img.size[1]))**(.5)
     print(img.size[0] * img.size[1])
     print(scale_ratio)
     if scale_ratio < 1:
