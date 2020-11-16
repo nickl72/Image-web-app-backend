@@ -20,9 +20,13 @@ class ImageListCreate(generics.ListCreateAPIView):
             limit = self.kwargs['limit']
         except:
             limit = False
+        try:
+            user = self.kwargs['user']
+        except:
+            user = False
         if limit:
             return Image.objects.all().order_by('?')[:self.kwargs['limit']]
-        elif self.kwargs['user']:
+        elif user:
             return Image.objects.filter(creator=self.kwargs['user'])
         else: 
             return Image.objects.all()
@@ -46,7 +50,6 @@ class SingleUser(generics.ListAPIView):
         username = self.kwargs['username']
         return User.objects.filter(username=username)
     serializer_class = SingleUserSerializer
-
 
 class GetImageById(generics.ListAPIView):
     def get_queryset(self):
@@ -109,7 +112,6 @@ def edit(request, id, actions, changes):
     else: 
         return HttpResponse('Error! Edits must be made as a PUT or POST request')
 
-
 def send_file(request,id):
     image = Image.objects.filter(id=id)[0]
     img = open(f'image_db/{image.path}', 'rb')
@@ -128,7 +130,6 @@ def send_ascii(request, id, html = False):
         new_file = open(f'image_db/ascii.txt', 'rb')
     return FileResponse(new_file, as_attachment=True, filename='ascii.txt')
 
-
 def crop(request, id, left, top, right, bottom):
     box = (left,top,right, bottom)
     image = Image.objects.filter(id=id)[0]
@@ -139,7 +140,6 @@ def crop(request, id, left, top, right, bottom):
     image_path=get_image_url(request, image)
     image_data = {'path':image_path, 'id':image.id}
     return HttpResponse(json.dumps(image_data))
-
 
 def overlay(request, id_1, id_2, left, top):
     image_1 = Image.objects.filter(id=id_1)[0]

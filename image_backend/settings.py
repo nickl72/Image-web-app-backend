@@ -63,7 +63,9 @@ MIDDLEWARE = [
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://flow-images.surge.sh",
+    "https://flow-images.surge.sh"
 ]
 
 ROOT_URLCONF = 'image_backend.urls'
