@@ -162,3 +162,12 @@ def image_size(request, id):
     size = {'width': width, 'height': height}
     img.close()
     return HttpResponse(json.dumps(size))
+
+def copy_image(request, userId, id):
+    image = Image.objects.filter(id=id)[0]
+    img = open_image(image)
+    image = save_image(img, image, create_record=True, creatorId=userId)
+    image_path=get_image_url(request, image)
+    image_data = {'path':image_path, 'id':image.id}
+    return HttpResponse(json.dumps(image_data))
+

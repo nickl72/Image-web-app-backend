@@ -11,7 +11,7 @@ def open_image(image):
     return PIL.Image.open(f'{image_path}/{image.path}')
 
 # new_image is a PIL.Image, original_image is a imageField_object
-def save_image(new_image, original_image, create_record = False):
+def save_image(new_image, original_image, create_record = False, creatorId=False):
     if create_record:
         filename = datetime.now().strftime('%Y%m%d%H%M%S')+'.jpeg'
     else:
@@ -22,7 +22,11 @@ def save_image(new_image, original_image, create_record = False):
     path = f'{filename}'
 
     if create_record:
-        img = Img(title=original_image.title, path=path, description=original_image.description, edited=True, creator=User.objects.filter(id=2)[0])
+        if creatorId:
+            creator = User.objects.filter(id=creatorId)[0]
+        else:
+            creator = User.objects.filter(id=original_image.id)[0]
+        img = Img(title=original_image.title, path=path, description=original_image.description, edited=True, creator=creator)
         img.save()
     else:
         img = original_image
@@ -49,6 +53,14 @@ def adjust_pixel(pixel, adjust):
     
 
 def color(img, r=0, g=0, b=0):
+    scale_ratio = 4000000 / (img.size[0] * img.size[1])
+    print(img.size[0] * img.size[1])
+    print(scale_ratio)
+    if scale_ratio < 1:
+        print('scaling')
+        img = img.resize((int(scale_ratio*img.size[1]),int(scale_ratio*img.size[1])))
+    print(img.size[0] * img.size[1])
+
     data = array(img)
     for row in data:
         for pixel in row:
