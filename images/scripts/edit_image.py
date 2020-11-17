@@ -58,7 +58,7 @@ def color(img, r=0, g=0, b=0):
     print(scale_ratio)
     if scale_ratio < 1:
         print('scaling')
-        img = img.resize((int(scale_ratio*img.size[1]),int(scale_ratio*img.size[1])))
+        img = img.resize((int(scale_ratio*img.size[0]),int(scale_ratio*img.size[1])))
     print(img.size[0] * img.size[1])
 
     data = array(img)
