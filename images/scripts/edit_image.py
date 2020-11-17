@@ -73,7 +73,7 @@ def color(img, r=0, g=0, b=0):
     red = red.point(lambda i: i + r)
     green = green.point(lambda i: i + g)
     blue = blue.point(lambda i: i + b)
-    new_img = img.merge('RGB',(red,green,blue))
+    new_img = Image.merge('RGB',(red,green,blue))
     return new_img
     # save_image(new_img, image)
 
