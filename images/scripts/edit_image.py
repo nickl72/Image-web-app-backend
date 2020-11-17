@@ -53,21 +53,27 @@ def adjust_pixel(pixel, adjust):
     
 
 def color(img, r=0, g=0, b=0):
-    scale_ratio = (400000 / (img.size[0] * img.size[1]))**(.5)
-    print(img.size[0] * img.size[1])
-    print(scale_ratio)
-    if scale_ratio < 1:
-        print('scaling')
-        img = img.resize((int(scale_ratio*img.size[0]),int(scale_ratio*img.size[1])))
-    print(img.size[0] * img.size[1])
+    # scale_ratio = (400000 / (img.size[0] * img.size[1]))**(.5)
+    # print(img.size[0] * img.size[1])
+    # print(scale_ratio)
+    # if scale_ratio < 1:
+    #     print('scaling')
+    #     img = img.resize((int(scale_ratio*img.size[0]),int(scale_ratio*img.size[1])))
+    # print(img.size[0] * img.size[1])
 
-    data = array(img)
-    for row in data:
-        for pixel in row:
-            pixel[0] = adjust_pixel(pixel[0], r)
-            pixel[1] = adjust_pixel(pixel[1], g)
-            pixel[2] = adjust_pixel(pixel[2], b)
-    new_img = PIL.Image.fromarray(data)
+    # data = array(img)
+    # for row in data:
+    #     for pixel in row:
+    #         pixel[0] = adjust_pixel(pixel[0], r)
+    #         pixel[1] = adjust_pixel(pixel[1], g)
+    #         pixel[2] = adjust_pixel(pixel[2], b)
+    # new_img = PIL.Image.fromarray(data)
+
+    red,green,blue = img.convert('RGB').split()
+    red = red.point(lambda i: i + r)
+    green = green.point(lambda i: i + g)
+    blue = blue.point(lambda i: i + b)
+    new_img = img.merge('RGB',(red,green,blue))
     return new_img
     # save_image(new_img, image)
 
